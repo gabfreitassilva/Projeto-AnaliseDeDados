@@ -8,6 +8,7 @@ with open('sheets/SafCompleta.csv', 'rb') as f:
     rawdata = f.read(10000)  # Lê amostra inicial
     result = chardet.detect(rawdata)
 
+# Efetua a leitura do arquivo, armazenando em um dataframe
 df = pd.read_csv('sheets/SafCompleta.csv', encoding=result['encoding'], sep=';')
 
 # Filtrando as SAFs por linha
