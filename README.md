@@ -5,4 +5,4 @@ Repositório onde irei armazenar e controlar meus estudos e projetos envolvendo 
 ## Tarefas para realizar
 
 - [x] Escrever um programa para analisar e retornar os dados essenciais que preciso para SAFs
-- [] Escrever um programa para analisar e retornar os dados essenciais que preciso para SSPs
+- [ ] Escrever um programa para analisar e retornar os dados essenciais que preciso para SSPs
