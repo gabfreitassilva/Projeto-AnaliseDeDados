@@ -1,7 +1,5 @@
 # Importação das bibliotecas padrões utilizadas
 import pandas as pd
-import numpy as np
-import datetime
 import chardet
 
 # Detecta a codificação do arquivo
@@ -12,5 +10,22 @@ with open('sheets/SspCompleta.csv', 'rb') as f:
 # Efetua a leitura do arquivo, armazenando em um dataframe
 df = pd.read_csv('sheets/SspCompleta.csv', encoding=result['encoding'], sep=';')
 
-# Exibir as primeiras linhas do dataframe obtido
-print(df.head())
+def linha_vlt(dataframe, linha): # Função para filtrar e retornar a linha de VLT desejada
+    filtro_material_rodante = dataframe['Grupo de Sistemas'] == 'MATERIAL RODANTE - VLT'
+    if not filtro_material_rodante.empty:    
+        match linha:
+            case 'oeste':
+                linha_oeste = dataframe[filtro_material_rodante & dataframe['Veiculo'].isin(['VLT01', 'VLT02', 'VLT03', 'VLT04', 'VLT05', 'VLT06'])]
+                return linha_oeste
+            case 'nordeste':
+                linha_nordeste = dataframe[filtro_material_rodante & dataframe['Veiculo'].isin(['VLT07', 'VLT08', 'VLT09', 'VLT10', 'VLT11', 'VLT12', 'VLT13'])]
+                return linha_nordeste
+            case 'sobral':
+                linha_sobral = dataframe[filtro_material_rodante & dataframe['Veiculo'].isin(['VLTS02', 'VLTS03', 'VLTS04', 'VLTS05', 'VLTS06'])]
+                return linha_sobral
+            case 'cariri':
+                linha_cariri = dataframe[filtro_material_rodante & dataframe['Veiculo'].isin(['TRAM1', 'TRAM2', 'VLTC03'])]
+                return linha_cariri
+    else:
+        print("Dataframe sem dados...")
+
