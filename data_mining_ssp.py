@@ -29,3 +29,22 @@ def linha_vlt(dataframe, linha): # Função para filtrar e retornar a linha de V
     else:
         print("Dataframe sem dados...")
 
+def linha_servico(dataframe, linha): # Função para filtrar e retornar somente os serviços necessários para a leitura em cada linha
+    match linha:
+        case 'oeste':
+            linha_servico = dataframe[dataframe['Serviço'].isin(['MANUTENÇÃO PREVENTIVA DIÁRIA', 'MANUTENÇÃO PREVENTIVA SEMANAL'])]
+            return linha_servico
+        case 'nordeste':
+            linha_servico = dataframe[dataframe['Serviço'].isin(['MANUTENÇÃO PREVENTIVA DIÁRIA', 'MANUTENÇÃO PREVENTIVA SEMANAL'])]
+            return linha_servico
+        case 'sobral':
+            linha_servico = dataframe[dataframe['Serviço'].isin(['MANUTENÇÃO PREVENTIVA DIÁRIA', 'MANUTENÇÃO PREVENTIVA SEMANAL'])]
+            return linha_servico
+        case 'cariri':
+            linha_servico = dataframe[dataframe['Serviço'].isin(['MANUTENÇÃO PREVENTIVA DIÁRIA', 'MANUTENÇÃO PREVENTIVA SEMANAL'])]
+            return linha_servico
+
+linha_oeste = linha_servico(linha_vlt(df, 'oeste'), 'oeste')
+linha_oeste["Data Abertura"] = pd.to_datetime(linha_oeste["Data Abertura"], dayfirst=True, format="mixed")
+linha_oeste["Apenas_Data"] = linha_oeste["Data Abertura"].dt.strftime('%d/%m/%Y')
+print(linha_oeste.head())
