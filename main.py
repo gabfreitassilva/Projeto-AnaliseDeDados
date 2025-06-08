@@ -98,8 +98,6 @@ sleep(2)
 input_element.send_keys(Keys.CONTROL + "a")
 input_element.send_keys(Keys.DELETE)
 
-current_month_number = datetime.now().strftime("%m")
-current_year_number = datetime.now().year
 date_input = "01" + str(current_month_number) + str(current_year_number)
 input_element.send_keys(date_input)
 
@@ -137,8 +135,6 @@ sleep(2)
 input_element.send_keys(Keys.CONTROL + "a")
 input_element.send_keys(Keys.DELETE)
 
-current_month_number = datetime.now().strftime("%m")
-current_year_number = datetime.now().year
 date_input = "01" + str(current_month_number) + str(current_year_number)
 input_element.send_keys(date_input)
 
@@ -176,8 +172,6 @@ sleep(2)
 input_element.send_keys(Keys.CONTROL + "a")
 input_element.send_keys(Keys.DELETE)
 
-current_month_number = datetime.now().strftime("%m")
-current_year_number = datetime.now().year
 date_input = "01" + str(current_month_number) + str(current_year_number)
 input_element.send_keys(date_input)
 
