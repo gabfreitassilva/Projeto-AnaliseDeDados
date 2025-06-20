@@ -1,10 +1,3 @@
-# Estudos e Projetos (Web Scraping e Análise de dados)
+# Projeto de Ciências de Dados
 
-Repositório onde irei armazenar e controlar meus estudos e projetos envolvendo mineração de dados, análise de dados e afins utilizando Python e outras ferramentas.
-
-## Tarefas para realizar
-
-- [x] Escrever um programa para analisar e retornar os dados essenciais da planilha de controle de SAFs
-- [ ] Escrever um programa para analisar e retornar os dados essenciais da planilha de controle de SSPs
-- [ ] Escrever um programa para analisar e retornar os dados essenciais da planilha de controle de OSPs
-- [ ] Escrever um programa para analisar e retornar os dados essenciais da planilha de controle de OSMs
+Neste projeto pretende-se utilizar de ferramentas da linguagem Python para automatizar processos administrativos repetitivos e além disso, aproveitar de bibliotecas como Pandas para fazer um trabalho de análise de dados a fim de obter de uma forma mais eficiente e ágil os dados necessários para preenchimento de planilhas de controle importantes no setor em questão.

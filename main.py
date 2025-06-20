@@ -13,13 +13,13 @@ with open("credentials.txt", "r") as file:
     user = file.readline().strip()
     password = file.readline().strip()
 
-service = Service(executable_path="geckodriver.exe")
+service = Service(executable_path="./geckodriver.exe")
 driver = webdriver.Firefox(service=service)
 
 driver.get("http://simg.metrofor.ce.gov.br")
 
 # AUTOMATIZAÇÃO DE LOGIN
-WebDriverWait(driver, 10).until(
+WebDriverWait(driver, 40).until(
     EC.presence_of_element_located((By.ID, "usuario"))
 )
 
@@ -31,20 +31,20 @@ input_element.send_keys(password + Keys.ENTER)
 #############################################################################################################
 
 # AUTOMATIZAÇÃO PARA BAIXAR BANCO DE DADOS SAF
-WebDriverWait(driver, 10).until(
+WebDriverWait(driver, 40).until(
     EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Relatórios"))
 )
 sleep(2)
 link = driver.find_element(By.PARTIAL_LINK_TEXT, "Relatórios")
 link.click()
 
-WebDriverWait(driver, 10).until(
+WebDriverWait(driver, 40).until(
     EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Relatório de Formulários"))
 )
 link = driver.find_element(By.PARTIAL_LINK_TEXT, "Relatório de Formulários")
 link.click()
 
-WebDriverWait(driver, 10).until(
+WebDriverWait(driver, 40).until(
     EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "SAF"))
 )
 link = driver.find_element(By.PARTIAL_LINK_TEXT, "SAF")
@@ -70,20 +70,20 @@ baixar_click.click()
 #############################################################################################################
 
 # AUTOMATIZAÇÃO PARA BAIXAR BANCO DE DADOS OSM
-WebDriverWait(driver, 10).until(
+WebDriverWait(driver, 40).until(
     EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Relatórios"))
 )
 sleep(2)
 link = driver.find_element(By.PARTIAL_LINK_TEXT, "Relatórios")
 link.click()
 
-WebDriverWait(driver, 10).until(
+WebDriverWait(driver, 40).until(
     EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Relatório de Formulários"))
 )
 link = driver.find_element(By.PARTIAL_LINK_TEXT, "Relatório de Formulários")
 link.click()
 
-WebDriverWait(driver, 10).until(
+WebDriverWait(driver, 40).until(
     EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "OSM"))
 )
 link = driver.find_element(By.PARTIAL_LINK_TEXT, "OSM")
@@ -107,20 +107,20 @@ baixar_click.click()
 #####################################################################################################3#######
 
 # AUTOMATIZAÇÃO PARA BAIXAR BANCO DE DADOS SSP
-WebDriverWait(driver, 10).until(
+WebDriverWait(driver, 40).until(
     EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Relatórios"))
 )
 sleep(2)
 link = driver.find_element(By.PARTIAL_LINK_TEXT, "Relatórios")
 link.click()
 
-WebDriverWait(driver, 10).until(
+WebDriverWait(driver, 40).until(
     EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Relatório de Formulários"))
 )
 link = driver.find_element(By.PARTIAL_LINK_TEXT, "Relatório de Formulários")
 link.click()
 
-WebDriverWait(driver, 10).until(
+WebDriverWait(driver, 40).until(
     EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "SSP"))
 )
 link = driver.find_element(By.PARTIAL_LINK_TEXT, "SSP")
@@ -144,20 +144,20 @@ baixar_click.click()
 #####################################################################################################3#######
 
 # AUTOMATIZAÇÃO PARA BAIXAR BANCO DE DADOS OSP
-WebDriverWait(driver, 10).until(
+WebDriverWait(driver, 40).until(
     EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Relatórios"))
 )
 sleep(2)
 link = driver.find_element(By.PARTIAL_LINK_TEXT, "Relatórios")
 link.click()
 
-WebDriverWait(driver, 10).until(
+WebDriverWait(driver, 40).until(
     EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Relatório de Formulários"))
 )
 link = driver.find_element(By.PARTIAL_LINK_TEXT, "Relatório de Formulários")
 link.click()
 
-WebDriverWait(driver, 10).until(
+WebDriverWait(driver, 40).until(
     EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "OSP"))
 )
 link = driver.find_element(By.PARTIAL_LINK_TEXT, "OSP")
