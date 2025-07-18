@@ -8,17 +8,19 @@ from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 from datetime import datetime
 
-
+# leitura das credenciais de acesso ao sistema
 with open("credentials.txt", "r") as file:
     user = file.readline().strip()
     password = file.readline().strip()
 
+# criação do driver para execução de qualquer automação que seja utilizando o firefox
 service = Service(executable_path="./geckodriver.exe")
 driver = webdriver.Firefox(service=service)
 
+# modo de acesso e utilização do firefox de forma automatizada
 driver.get("http://simg.metrofor.ce.gov.br")
 
-# AUTOMATIZAÇÃO DE LOGIN
+# Automatização de login no sistema
 WebDriverWait(driver, 40).until(
     EC.presence_of_element_located((By.ID, "usuario"))
 )
@@ -28,9 +30,9 @@ input_element.send_keys(user)
 
 input_element = driver.find_element(By.ID, "senha")
 input_element.send_keys(password + Keys.ENTER)
-#############################################################################################################
 
-# AUTOMATIZAÇÃO PARA BAIXAR BANCO DE DADOS SAF
+
+# Automatização para obtenção do csv com os dados de Solicitações de Abertura de Falhas
 WebDriverWait(driver, 40).until(
     EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Relatórios"))
 )
@@ -56,20 +58,22 @@ link.click()
 
 input_element = driver.find_element(By.NAME, "dataPartirAbertura")
 sleep(2)
+# Comandos para limpar a caixa de seleção e digitar a data desejada
 input_element.send_keys(Keys.CONTROL + "a")
 input_element.send_keys(Keys.DELETE)
 
-current_month_number = datetime.now().strftime("%m")
-current_year_number = datetime.now().year
-date_input = "01" + str(current_month_number) + str(current_year_number)
-input_element.send_keys(date_input)
+current_month_number = datetime.now().strftime("%m") # Identifica o mês atual de acordo com a máquina que o programa estiver rodando
+current_year_number = datetime.now().year # Identifica o ano atual de acordo com a máquina que o programa estiver rodando
+date_input = "01" + str(current_month_number) + str(current_year_number) # Formata a data obtida com o dia predefinido e o mês e ano obtidos anteriormente
+# Ex: 01032025 (neste formato)
+input_element.send_keys(date_input) # Comando para entrar com a data definida anteriormente
 
 sleep(2)
-baixar_click = driver.find_element(By.CLASS_NAME, "btn.btn-primary.btn-lg")
+baixar_click = driver.find_element(By.CLASS_NAME, "btn.btn-primary.btn-lg") # Classe do botão para fazer o download do csv com os dados
 baixar_click.click()
-#############################################################################################################
 
-# AUTOMATIZAÇÃO PARA BAIXAR BANCO DE DADOS OSM
+
+# Automatização do processo de obtenção do csv com os dados de Ordens de Serviços de Manutenção
 WebDriverWait(driver, 40).until(
     EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Relatórios"))
 )
@@ -98,15 +102,14 @@ sleep(2)
 input_element.send_keys(Keys.CONTROL + "a")
 input_element.send_keys(Keys.DELETE)
 
-date_input = "01" + str(current_month_number) + str(current_year_number)
 input_element.send_keys(date_input)
 
 sleep(2)
 baixar_click = driver.find_element(By.CLASS_NAME, "btn.btn-primary.btn-lg")
 baixar_click.click()
-#####################################################################################################3#######
 
-# AUTOMATIZAÇÃO PARA BAIXAR BANCO DE DADOS SSP
+
+# Automatização para obtenção do csv com os dados de Solicitações de Serviços Programados
 WebDriverWait(driver, 40).until(
     EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Relatórios"))
 )
@@ -135,15 +138,13 @@ sleep(2)
 input_element.send_keys(Keys.CONTROL + "a")
 input_element.send_keys(Keys.DELETE)
 
-date_input = "01" + str(current_month_number) + str(current_year_number)
 input_element.send_keys(date_input)
 
 sleep(2)
 baixar_click = driver.find_element(By.CLASS_NAME, "btn.btn-primary.btn-lg")
 baixar_click.click()
-#####################################################################################################3#######
 
-# AUTOMATIZAÇÃO PARA BAIXAR BANCO DE DADOS OSP
+# Automatização para obtenção do csv com os dados de Ordens de Serviços Programados
 WebDriverWait(driver, 40).until(
     EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, "Relatórios"))
 )
@@ -172,13 +173,12 @@ sleep(2)
 input_element.send_keys(Keys.CONTROL + "a")
 input_element.send_keys(Keys.DELETE)
 
-date_input = "01" + str(current_month_number) + str(current_year_number)
 input_element.send_keys(date_input)
 
 sleep(2)
 baixar_click = driver.find_element(By.CLASS_NAME, "btn.btn-primary.btn-lg")
 baixar_click.click()
-#####################################################################################################3#######
+
 
 sleep(10)
-driver.quit()
+driver.quit() # Finaliza o navegador aberto em modo de automatização
