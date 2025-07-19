@@ -41,7 +41,20 @@ countB.fill(0) # Preenche a matriz completa com o número 0
 countC = np.ndarray(shape=(5,32), dtype=int) # Cria uma matriz de 3 linhas e 31 colunas
 countC.fill(0) # Preenche a matriz completa com o número 0
 
-df_safs = pd.DataFrame(countA)
+# df_safs = pd.DataFrame(countA)
+df_countA = pd.DataFrame(
+    data= countA,
+    index=['sul', 'oeste', 'nordeste', 'sobral', 'cariri'],
+)
+df_countB = pd.DataFrame(
+    data= countB,
+    index=['sul', 'oeste', 'nordeste', 'sobral', 'cariri'],
+)
+df_countC = pd.DataFrame(
+    data= countC,
+    index=['sul', 'oeste', 'nordeste', 'sobral', 'cariri'],
+)
+
 
 # Filtrando e fazendo a contagem de SAFs por dia [TUE]
 def contagem_safs(dataframe, linha):
@@ -233,13 +246,18 @@ def contagem_safs(dataframe, linha):
                         print(70*'=', '\n')                                                                
 
 # contagem das safs por dia em cada linha
-# contagem_safs(df, 'sul')
-# contagem_safs(df, 'oeste')
-# contagem_safs(df, 'nordeste')
-# contagem_safs(df, 'sobral')
-# contagem_safs(df, 'cariri')
+contagem_safs(df, 'sul')
+contagem_safs(df, 'oeste')
+contagem_safs(df, 'nordeste')
+contagem_safs(df, 'sobral')
+contagem_safs(df, 'cariri')
 
-# print(countB)
 
-print(df_safs)
+print(df_countA)
+print(df_countB)
+print(df_countC)
+# for dia in range(0, 31):
+#     dia+=1
+#     print(dia)
 
+df_countB.to_excel('teste.xlsx')
