@@ -34,9 +34,14 @@ def linha_trem(dataframe, linha): # Função para filtrar e retornar a linha de 
     else:
         print("Dataframe sem dados...")
 
-countA = np.zeros(32, dtype=int)
-countB = np.zeros(32, dtype=int)
-countC = np.zeros(32, dtype=int)
+countA = np.ndarray(shape=(5,32), dtype=int) # Cria uma matriz de 3 linhas e 31 colunas
+countA.fill(0) # Preenche a matriz completa com o número 0
+countB = np.ndarray(shape=(5,32), dtype=int) # Cria uma matriz de 3 linhas e 31 colunas
+countB.fill(0) # Preenche a matriz completa com o número 0
+countC = np.ndarray(shape=(5,32), dtype=int) # Cria uma matriz de 3 linhas e 31 colunas
+countC.fill(0) # Preenche a matriz completa com o número 0
+
+df_safs = pd.DataFrame(countA)
 
 # Filtrando e fazendo a contagem de SAFs por dia [TUE]
 def contagem_safs(dataframe, linha):
@@ -66,161 +71,175 @@ def contagem_safs(dataframe, linha):
                     data_str = f"{dia:02d}/{mes:02d}/{ano}"
                     filtro_data = dataframe['Apenas_Data'] == data_str
                     df_filtrado = dataframe[filtro_data]
-                # Contar os níveis
-                    countA[dia] = len(df_filtrado[df_filtrado['Nível'] == 'A'])
-                    countB[dia] = len(df_filtrado[df_filtrado['Nível'] == 'B'])
-                    countC[dia] = len(df_filtrado[df_filtrado['Nível'] == 'C'])
+                    # Contar os níveis
+                    countA[0, dia] = len(df_filtrado[df_filtrado['Nível'] == 'A'])
+                    countB[0, dia] = len(df_filtrado[df_filtrado['Nível'] == 'B'])
+                    countC[0, dia] = len(df_filtrado[df_filtrado['Nível'] == 'C'])
                     
-                # Verifica se o DataFrame filtrado não está vazio
+                    # Verifica se o DataFrame filtrado não está vazio, caso não esteja, exibe no terminal
+                    # as safs por cada dia
                     if not df_filtrado.empty: 
                         print(f" Dados para {data_str}: ".center(70, '='))
                         print(df_filtrado[['Nível', 'Grupo', 'Veículo', 'Apenas_Data', 'Status']])
-                        print(f"Dia {dia}: A = {countA[dia]}, B = {countB[dia]}, C = {countC[dia]}.")
+                        print(f"Dia {dia}: A = {countA[0, dia]}, B = {countB[0, dia]}, C = {countC[0, dia]}.")
                         print(70*'=', '\n')
         case 'oeste':
-                    dataframe = linha_trem(dataframe, linha).copy()
-                    if not dataframe.empty:
-                        dataframe["Data de Abertura"] = pd.to_datetime(dataframe["Data de Abertura"], dayfirst=True, format="mixed")
-                        dataframe["Apenas_Data"] = dataframe["Data de Abertura"].dt.strftime('%d/%m/%Y')
+            dataframe = linha_trem(dataframe, linha).copy()
+            if not dataframe.empty:
+                dataframe["Data de Abertura"] = pd.to_datetime(dataframe["Data de Abertura"], dayfirst=True, format="mixed")
+                dataframe["Apenas_Data"] = dataframe["Data de Abertura"].dt.strftime('%d/%m/%Y')
 
-                        # Verificar o formato real das datas na coluna
-                        primeira_data = dataframe['Apenas_Data'].iloc[0]
-                        print(f"Formato da data de exemplo: {primeira_data}")
+                # Verificar o formato real das datas na coluna
+                primeira_data = dataframe['Apenas_Data'].iloc[0]
+                print(f"Formato da data de exemplo: {primeira_data}")
 
-                        # Extrair mês e ano de uma data válida
-                        try:
-                            partes = primeira_data.split('/')
-                            dia = int(partes[0])
-                            mes = int(partes[1])
-                            ano = int(partes[2])
-                        except (IndexError, ValueError):
-                            mes = datetime.now().month  # Valor padrão se falhar
-                            ano = datetime.now().year   # Valor padrão se falhar
+                # Extrair mês e ano de uma data válida
+                try:
+                    partes = primeira_data.split('/')
+                    dia = int(partes[0])
+                    mes = int(partes[1])
+                    ano = int(partes[2])
+                except (IndexError, ValueError):
+                    mes = datetime.now().month  # Valor padrão se falhar
+                    ano = datetime.now().year   # Valor padrão se falhar
 
-                        # Iterar pelos dias do mês (de 1 a 31)
-                        for dia in range(1, 32):
-                            data_str = f"{dia:02d}/{mes:02d}/{ano}"
-                            filtro_data = dataframe['Apenas_Data'] == data_str
-                            df_filtrado = dataframe[filtro_data]
-                        # Contar os níveis
-                            countA[dia] = len(df_filtrado[df_filtrado['Nível'] == 'A'])
-                            countB[dia] = len(df_filtrado[df_filtrado['Nível'] == 'B'])
-                            countC[dia] = len(df_filtrado[df_filtrado['Nível'] == 'C'])
-                            
-                        # Verifica se o DataFrame filtrado não está vazio
-                            if not df_filtrado.empty: 
-                                print(f" Dados para {data_str}: ".center(70, '='))
-                                print(df_filtrado[['Nível', 'Grupo', 'Veículo', 'Apenas_Data', 'Status']])
-                                print(f"Dia {dia}: A = {countA[dia]}, B = {countB[dia]}, C = {countC[dia]}.")
-                                print(70*'=', '\n')
+                # Iterar pelos dias do mês (de 1 a 31)
+                for dia in range(1, 32):
+                    data_str = f"{dia:02d}/{mes:02d}/{ano}"
+                    filtro_data = dataframe['Apenas_Data'] == data_str
+                    df_filtrado = dataframe[filtro_data]
+                    # Contar os níveis
+                    countA[1, dia] = len(df_filtrado[df_filtrado['Nível'] == 'A'])
+                    countB[1, dia] = len(df_filtrado[df_filtrado['Nível'] == 'B'])
+                    countC[1, dia] = len(df_filtrado[df_filtrado['Nível'] == 'C'])
+                    
+                    # Verifica se o DataFrame filtrado não está vazio, caso não esteja, exibe no terminal
+                    # as safs por cada dia
+                    if not df_filtrado.empty: 
+                        print(f" Dados para {data_str}: ".center(70, '='))
+                        print(df_filtrado[['Nível', 'Grupo', 'Veículo', 'Apenas_Data', 'Status']])
+                        print(f"Dia {dia}: A = {countA[1, dia]}, B = {countB[1, dia]}, C = {countC[1, dia]}.")
+                        print(70*'=', '\n')
         case 'nordeste':
-                    dataframe = linha_trem(dataframe, linha).copy()
-                    if not dataframe.empty:
-                        dataframe["Data de Abertura"] = pd.to_datetime(dataframe["Data de Abertura"], dayfirst=True, format="mixed")
-                        dataframe["Apenas_Data"] = dataframe["Data de Abertura"].dt.strftime('%d/%m/%Y')
+            dataframe = linha_trem(dataframe, linha).copy()
+            if not dataframe.empty:
+                dataframe["Data de Abertura"] = pd.to_datetime(dataframe["Data de Abertura"], dayfirst=True, format="mixed")
+                dataframe["Apenas_Data"] = dataframe["Data de Abertura"].dt.strftime('%d/%m/%Y')
 
-                        # Verificar o formato real das datas na coluna
-                        primeira_data = dataframe['Apenas_Data'].iloc[0]
-                        print(f"Formato da data de exemplo: {primeira_data}")
+                # Verificar o formato real das datas na coluna
+                primeira_data = dataframe['Apenas_Data'].iloc[0]
+                print(f"Formato da data de exemplo: {primeira_data}")
 
-                        # Extrair mês e ano de uma data válida
-                        try:
-                            partes = primeira_data.split('/')
-                            dia = int(partes[0])
-                            mes = int(partes[1])
-                            ano = int(partes[2])
-                        except (IndexError, ValueError):
-                            mes = datetime.now().month  # Valor padrão se falhar
-                            ano = datetime.now().year   # Valor padrão se falhar
+                # Extrair mês e ano de uma data válida
+                try:
+                    partes = primeira_data.split('/')
+                    dia = int(partes[0])
+                    mes = int(partes[1])
+                    ano = int(partes[2])
+                except (IndexError, ValueError):
+                    mes = datetime.now().month  # Valor padrão se falhar
+                    ano = datetime.now().year   # Valor padrão se falhar
 
-                        # Iterar pelos dias do mês (de 1 a 31)
-                        for dia in range(1, 32):
-                            data_str = f"{dia:02d}/{mes:02d}/{ano}"
-                            filtro_data = dataframe['Apenas_Data'] == data_str
-                            df_filtrado = dataframe[filtro_data]
-                        # Contar os níveis
-                            countA[dia] = len(df_filtrado[df_filtrado['Nível'] == 'A'])
-                            countB[dia] = len(df_filtrado[df_filtrado['Nível'] == 'B'])
-                            countC[dia] = len(df_filtrado[df_filtrado['Nível'] == 'C'])
-                            
-                        # Verifica se o DataFrame filtrado não está vazio
-                            if not df_filtrado.empty: 
-                                print(f" Dados para {data_str}: ".center(70, '='))
-                                print(df_filtrado[['Nível', 'Grupo', 'Veículo', 'Apenas_Data', 'Status']])
-                                print(f"Dia {dia}: A = {countA[dia]}, B = {countB[dia]}, C = {countC[dia]}.")
-                                print(70*'=', '\n')
+                # Iterar pelos dias do mês (de 1 a 31)
+                for dia in range(1, 32):
+                    data_str = f"{dia:02d}/{mes:02d}/{ano}"
+                    filtro_data = dataframe['Apenas_Data'] == data_str
+                    df_filtrado = dataframe[filtro_data]
+                    # Contar os níveis
+                    countA[2, dia] = len(df_filtrado[df_filtrado['Nível'] == 'A'])
+                    countB[2, dia] = len(df_filtrado[df_filtrado['Nível'] == 'B'])
+                    countC[2, dia] = len(df_filtrado[df_filtrado['Nível'] == 'C'])
+                    
+                    # Verifica se o DataFrame filtrado não está vazio, caso não esteja, exibe no terminal
+                    # as safs por cada dia
+                    if not df_filtrado.empty: 
+                        print(f" Dados para {data_str}: ".center(70, '='))
+                        print(df_filtrado[['Nível', 'Grupo', 'Veículo', 'Apenas_Data', 'Status']])
+                        print(f"Dia {dia}: A = {countA[2, dia]}, B = {countB[2, dia]}, C = {countC[2, dia]}.")
+                        print(70*'=', '\n')
         case 'sobral':
-                    dataframe = linha_trem(dataframe, linha).copy()
-                    if not dataframe.empty:
-                        dataframe["Data de Abertura"] = pd.to_datetime(dataframe["Data de Abertura"], dayfirst=True, format="mixed")
-                        dataframe["Apenas_Data"] = dataframe["Data de Abertura"].dt.strftime('%d/%m/%Y')
+            dataframe = linha_trem(dataframe, linha).copy()
+            if not dataframe.empty:
+                dataframe["Data de Abertura"] = pd.to_datetime(dataframe["Data de Abertura"], dayfirst=True, format="mixed")
+                dataframe["Apenas_Data"] = dataframe["Data de Abertura"].dt.strftime('%d/%m/%Y')
 
-                        # Verificar o formato real das datas na coluna
-                        primeira_data = dataframe['Apenas_Data'].iloc[0]
-                        print(f"Formato da data de exemplo: {primeira_data}")
+                # Verificar o formato real das datas na coluna
+                primeira_data = dataframe['Apenas_Data'].iloc[0]
+                print(f"Formato da data de exemplo: {primeira_data}")
 
-                        # Extrair mês e ano de uma data válida
-                        try:
-                            partes = primeira_data.split('/')
-                            dia = int(partes[0])
-                            mes = int(partes[1])
-                            ano = int(partes[2])
-                        except (IndexError, ValueError):
-                            mes = datetime.now().month  # Valor padrão se falhar
-                            ano = datetime.now().year   # Valor padrão se falhar
+                # Extrair mês e ano de uma data válida
+                try:
+                    partes = primeira_data.split('/')
+                    dia = int(partes[0])
+                    mes = int(partes[1])
+                    ano = int(partes[2])
+                except (IndexError, ValueError):
+                    mes = datetime.now().month  # Valor padrão se falhar
+                    ano = datetime.now().year   # Valor padrão se falhar
 
-                        # Iterar pelos dias do mês (de 1 a 31)
-                        for dia in range(1, 32):
-                            data_str = f"{dia:02d}/{mes:02d}/{ano}"
-                            filtro_data = dataframe['Apenas_Data'] == data_str
-                            df_filtrado = dataframe[filtro_data]
-                        # Contar os níveis
-                            countA[dia] = len(df_filtrado[df_filtrado['Nível'] == 'A'])
-                            countB[dia] = len(df_filtrado[df_filtrado['Nível'] == 'B'])
-                            countC[dia] = len(df_filtrado[df_filtrado['Nível'] == 'C'])
-                            
-                        # Verifica se o DataFrame filtrado não está vazio
-                            if not df_filtrado.empty: 
-                                print(f" Dados para {data_str}: ".center(70, '='))
-                                print(df_filtrado[['Nível', 'Grupo', 'Veículo', 'Apenas_Data', 'Status']])
-                                print(f"Dia {dia}: A = {countA[dia]}, B = {countB[dia]}, C = {countC[dia]}.")
-                                print(70*'=', '\n')
+                # Iterar pelos dias do mês (de 1 a 31)
+                for dia in range(1, 32):
+                    data_str = f"{dia:02d}/{mes:02d}/{ano}"
+                    filtro_data = dataframe['Apenas_Data'] == data_str
+                    df_filtrado = dataframe[filtro_data]
+                    # Contar os níveis
+                    countA[3, dia] = len(df_filtrado[df_filtrado['Nível'] == 'A'])
+                    countB[3, dia] = len(df_filtrado[df_filtrado['Nível'] == 'B'])
+                    countC[3, dia] = len(df_filtrado[df_filtrado['Nível'] == 'C'])
+                    
+                    # Verifica se o DataFrame filtrado não está vazio, caso não esteja, exibe no terminal
+                    # as safs por cada dia
+                    if not df_filtrado.empty: 
+                        print(f" Dados para {data_str}: ".center(70, '='))
+                        print(df_filtrado[['Nível', 'Grupo', 'Veículo', 'Apenas_Data', 'Status']])
+                        print(f"Dia {dia}: A = {countA[3, dia]}, B = {countB[3, dia]}, C = {countC[3, dia]}.")
+                        print(70*'=', '\n')
         case 'cariri':
-                    dataframe = linha_trem(dataframe, linha).copy()
-                    if not dataframe.empty:
-                        dataframe["Data de Abertura"] = pd.to_datetime(dataframe["Data de Abertura"], dayfirst=True, format="mixed")
-                        dataframe["Apenas_Data"] = dataframe["Data de Abertura"].dt.strftime('%d/%m/%Y')
+            dataframe = linha_trem(dataframe, linha).copy()
+            if not dataframe.empty:
+                dataframe["Data de Abertura"] = pd.to_datetime(dataframe["Data de Abertura"], dayfirst=True, format="mixed")
+                dataframe["Apenas_Data"] = dataframe["Data de Abertura"].dt.strftime('%d/%m/%Y')
 
-                        # Verificar o formato real das datas na coluna
-                        primeira_data = dataframe['Apenas_Data'].iloc[0]
-                        print(f"Formato da data de exemplo: {primeira_data}")
+                # Verificar o formato real das datas na coluna
+                primeira_data = dataframe['Apenas_Data'].iloc[0]
+                print(f"Formato da data de exemplo: {primeira_data}")
 
-                        # Extrair mês e ano de uma data válida
-                        try:
-                            partes = primeira_data.split('/')
-                            dia = int(partes[0])
-                            mes = int(partes[1])
-                            ano = int(partes[2])
-                        except (IndexError, ValueError):
-                            mes = datetime.now().month  # Valor padrão se falhar
-                            ano = datetime.now().year   # Valor padrão se falhar
+                # Extrair mês e ano de uma data válida
+                try:
+                    partes = primeira_data.split('/')
+                    dia = int(partes[0])
+                    mes = int(partes[1])
+                    ano = int(partes[2])
+                except (IndexError, ValueError):
+                    mes = datetime.now().month  # Valor padrão se falhar
+                    ano = datetime.now().year   # Valor padrão se falhar
 
-                        # Iterar pelos dias do mês (de 1 a 31)
-                        for dia in range(1, 32):
-                            data_str = f"{dia:02d}/{mes:02d}/{ano}"
-                            filtro_data = dataframe['Apenas_Data'] == data_str
-                            df_filtrado = dataframe[filtro_data]
-                        # Contar os níveis
-                            countA[dia] = len(df_filtrado[df_filtrado['Nível'] == 'A'])
-                            countB[dia] = len(df_filtrado[df_filtrado['Nível'] == 'B'])
-                            countC[dia] = len(df_filtrado[df_filtrado['Nível'] == 'C'])
-                            
-                        # Verifica se o DataFrame filtrado não está vazio
-                            if not df_filtrado.empty: 
-                                print(f" Dados para {data_str}: ".center(70, '='))
-                                print(df_filtrado[['Nível', 'Grupo', 'Veículo', 'Apenas_Data', 'Status']])
-                                print(f"Dia {dia}: A = {countA[dia]}, B = {countB[dia]}, C = {countC[dia]}.")
-                                print(70*'=', '\n')                                                                
+                # Iterar pelos dias do mês (de 1 a 31)
+                for dia in range(1, 32):
+                    data_str = f"{dia:02d}/{mes:02d}/{ano}"
+                    filtro_data = dataframe['Apenas_Data'] == data_str
+                    df_filtrado = dataframe[filtro_data]
+                    # Contar os níveis
+                    countA[4, dia] = len(df_filtrado[df_filtrado['Nível'] == 'A'])
+                    countB[4, dia] = len(df_filtrado[df_filtrado['Nível'] == 'B'])
+                    countC[4, dia] = len(df_filtrado[df_filtrado['Nível'] == 'C'])
+                    
+                    # Verifica se o DataFrame filtrado não está vazio, caso não esteja, exibe no terminal
+                    # as safs por cada dia
+                    if not df_filtrado.empty: 
+                        print(f" Dados para {data_str}: ".center(70, '='))
+                        print(df_filtrado[['Nível', 'Grupo', 'Veículo', 'Apenas_Data', 'Status']])
+                        print(f"Dia {dia}: A = {countA[4, dia]}, B = {countB[4, dia]}, C = {countC[4, dia]}.")
+                        print(70*'=', '\n')                                                                
 
 # contagem das safs por dia em cada linha
-contagem_safs(df, 'sul')
+# contagem_safs(df, 'sul')
+# contagem_safs(df, 'oeste')
+# contagem_safs(df, 'nordeste')
+# contagem_safs(df, 'sobral')
+# contagem_safs(df, 'cariri')
+
+# print(countB)
+
+print(df_safs)
+
