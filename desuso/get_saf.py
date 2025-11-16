@@ -13,23 +13,24 @@ df = pd.read_csv('sheets/SafCompleta.csv', encoding=result['encoding'], sep=';')
 
 # Filtrando as SAFs por linha
 def linha_trem(dataframe, linha): # Função para filtrar e retornar a linha de VLT desejada
-    filtro_material_rodante = dataframe['Grupo'] == 'MATERIAL RODANTE - VLT'
-    if not filtro_material_rodante.empty:    
+    filtro_vlt = dataframe['Grupo'] == 'MATERIAL RODANTE - VLT'
+    filtro_tue = dataframe['Grupo'] == 'MATERIAL RODANTE - TUE'
+    if not filtro_vlt.empty | filtro_tue.empty:    
         match linha:
             case 'sul':
                 linha_sul = dataframe[dataframe['Grupo'] == 'MATERIAL RODANTE - TUE']
                 return linha_sul
             case 'oeste':
-                linha_oeste = dataframe[filtro_material_rodante & dataframe['Veículo'].isin(['VLT01', 'VLT02', 'VLT03', 'VLT04', 'VLT05', 'VLT06'])]
+                linha_oeste = dataframe[filtro_vlt & dataframe['Veículo'].isin(['VLT01', 'VLT02', 'VLT03', 'VLT04', 'VLT05', 'VLT06'])]
                 return linha_oeste
             case 'nordeste':
-                linha_nordeste = dataframe[filtro_material_rodante & dataframe['Veículo'].isin(['VLT07', 'VLT08', 'VLT09', 'VLT10', 'VLT11', 'VLT12', 'VLT13'])]
+                linha_nordeste = dataframe[filtro_vlt & dataframe['Veículo'].isin(['VLT07', 'VLT08', 'VLT09', 'VLT10', 'VLT11', 'VLT12', 'VLT13'])]
                 return linha_nordeste
             case 'sobral':
-                linha_sobral = dataframe[filtro_material_rodante & dataframe['Veículo'].isin(['VLTS02', 'VLTS03', 'VLTS04', 'VLTS05', 'VLTS06'])]
+                linha_sobral = dataframe[filtro_vlt & dataframe['Veículo'].isin(['VLTS02', 'VLTS03', 'VLTS04', 'VLTS05', 'VLTS06'])]
                 return linha_sobral
             case 'cariri':
-                linha_cariri = dataframe[filtro_material_rodante & dataframe['Veículo'].isin(['TRAM1', 'TRAM2', 'VLTC03'])]
+                linha_cariri = dataframe[filtro_vlt & dataframe['Veículo'].isin(['TRAM1', 'TRAM2', 'VLTC03'])]
                 return linha_cariri
     else:
         print("Dataframe sem dados...")
@@ -256,8 +257,5 @@ contagem_safs(df, 'cariri')
 print(df_countA)
 print(df_countB)
 print(df_countC)
-# for dia in range(0, 31):
-#     dia+=1
-#     print(dia)
 
 df_countB.to_excel('teste.xlsx')
