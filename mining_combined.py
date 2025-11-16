@@ -5,6 +5,7 @@ from typing import Dict, Tuple, Optional
 from openpyxl import load_workbook
 from openpyxl.styles import Font, Alignment, PatternFill
 from openpyxl.utils.dataframe import dataframe_to_rows
+from openpyxl.utils import get_column_letter
 
 
 class UnifiedSAFAnalyzer:
@@ -204,7 +205,7 @@ class UnifiedSAFAnalyzer:
         try:
             wb = load_workbook(template_path)
             if sheet_name is None:
-                sheet_name = 'sem_falhas' if self.sem_falhas else 'safs_diarias'
+                sheet_name = 'Sem Falhas' if self.sem_falhas else "SAF's Diárias"
 
             if sheet_name not in wb.sheetnames:
                 raise ValueError(f"Planilha '{sheet_name}' não encontrada no template")
@@ -376,10 +377,11 @@ class SAFComFalhasAnalyzer:
         try:
             wb = load_workbook(template_path)
 
-            if 'falhas_equipamento' in wb.sheetnames:
-                wb.remove(wb['falhas_equipamento'])
+            # usar nome de aba 'Falhas'
+            if 'Falhas' in wb.sheetnames:
+                wb.remove(wb['Falhas'])
 
-            ws_detalhes = wb.create_sheet('falhas_equipamento', 0)
+            ws_detalhes = wb.create_sheet('Falhas', 0)
 
             self._formatar_aba_detalhes(ws_detalhes, df_falhas)
 
@@ -402,17 +404,22 @@ class SAFComFalhasAnalyzer:
             for col_idx, value in enumerate(row_data, 1):
                 worksheet.cell(row=row_idx, column=col_idx, value=value)
 
-        for column in worksheet.columns:
-            max_length = 0
-            column_letter = column[0].column_letter
-            for cell in column:
-                try:
-                    if len(str(cell.value)) > max_length:
-                        max_length = len(str(cell.value))
-                except:
-                    pass
-            adjusted_width = min(max_length + 2, 50)
-            worksheet.column_dimensions[column_letter].width = adjusted_width
+        # Ajustar larguras conforme solicitado (colunas A..G)
+        widths = [12, 12, 28, 10, 40, 47, 23]
+        for idx, w in enumerate(widths, start=1):
+            try:
+                col_letter = get_column_letter(idx)
+                worksheet.column_dimensions[col_letter].width = w
+            except Exception:
+                pass
+
+        # Habilitar AutoFilter para permitir filtragem na primeira linha
+        try:
+            last_col = get_column_letter(worksheet.max_column)
+            last_row = worksheet.max_row
+            worksheet.auto_filter.ref = f"A1:{last_col}{last_row}"
+        except Exception:
+            pass
 
         worksheet.freeze_panes = 'A2'
         print("Aba de detalhes formatada com sucesso.")
@@ -421,8 +428,8 @@ class SAFComFalhasAnalyzer:
 def main():
     try:
         base = pathlib.Path.home() / "Downloads" / "Documentos - Farol"
-        template_path = base / "contagem_safs.xlsx"
-        output_path = base / "contagem_safs.xlsx"
+        template_path = base / "dados_resumo.xlsx"
+        output_path = base / "dados_resumo.xlsx"
 
         # Intervalo de datas (mude conforme necessário; use formatos: '01-10-2025', '01102025' ou '01/10/2025')
         min_date_str = '01-10-2025'
@@ -437,13 +444,15 @@ def main():
         if saf_file.exists():
             analyzer = UnifiedSAFAnalyzer(str(saf_file), sem_falhas=False, min_date=min_date_str, max_date=max_date_str)
             analyzer.processar_todas_linhas()
-            analyzer.salvar_na_planilha_existente(str(template_path), str(output_path), sheet_name='safs_diarias')
+            # salvar na aba 'SAF\'s Diárias' conforme novo nome das abas
+            analyzer.salvar_na_planilha_existente(str(template_path), str(output_path), sheet_name="SAF's Diárias")
             processed_any = True
 
         if osm_file.exists():
             analyzer2 = UnifiedSAFAnalyzer(str(osm_file), sem_falhas=True, min_date=min_date_str, max_date=max_date_str)
             analyzer2.processar_todas_linhas()
-            analyzer2.salvar_na_planilha_existente(str(template_path), str(output_path), sheet_name='sem_falhas')
+            # salvar na aba 'Sem Falhas' conforme novo nome das abas
+            analyzer2.salvar_na_planilha_existente(str(template_path), str(output_path), sheet_name='Sem Falhas')
             processed_any = True
 
         # Processar falhas do equipamento (detalhado) se existir o arquivo OSM
